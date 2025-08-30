@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Emergency Hub</title>
+    <style>
+        body{font-family:sans-serif;font-size:18px;color:#000;background:#fff;margin:0;padding:10px;line-height:1.5;max-width:800px;margin:auto;}
+        h1,h2{font-size:24px;margin:10px 0;}
+        button,.btn{display:block;width:100%;font-size:24px;padding:20px;margin:10px 0;background:#007bff;color:#fff;border:none;cursor:pointer;border-radius:5px;text-align:center;min-height:44px;}
+        button:hover,.btn:hover{background:#0056b3;}
+        .red-btn{background:#dc3545;} .red-btn:hover{background:#c82333;}
+        .green-btn{background:#28a745;} .green-btn:hover{background:#218838;}
+        input,select,textarea{width:100%;font-size:18px;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px;box-sizing:border-box;}
+        ul{list-style:none;padding:0;}
+        li{margin:5px 0;}
+        .section{margin:20px 0;border-bottom:1px solid #eee;padding-bottom:10px;}
+        .hidden{display:none;}
+        svg{width:50px;height:50px;margin:10px;}
+        /* High contrast, large targets, accessible */
+        a{color:#007bff;text-decoration:underline;} a:focus{outline:2px solid #000;}
+        button:focus{outline:2px solid #000;}
+        input:focus{outline:2px solid #000;}
+        /* Color blind: patterns or text over color */
+        .alert{background:#ffc107;color:#000;padding:10px;}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Universal Emergency Hub</h1>
+        <p>A one-stop emergency info system for everyone.</p>
+    </header>
+
+    <main>
+        <!-- Emergency Essentials -->
+        <section id="essentials" class="section">
+            <h2>Emergency Essentials</h2>
+            
+            <!-- Quick Dial -->
+            <div>
+                <h3>Quick Dial</h3>
+                <a href="tel:911" class="btn red-btn" role="button" aria-label="Call 911 Emergency">Call 911</a>
+                <a href="tel:18002221222" class="btn red-btn" role="button" aria-label="Call Poison Control">Poison Control (1-800-222-1222)</a>
+                <input type="tel" id="local-police" placeholder="Enter local police number (e.g., 555-1234)" aria-label="Local Police Number">
+                <button onclick="saveLocalPolice()" class="green-btn">Save Local Police</button>
+                <a id="local-police-btn" href="#" class="btn red-btn hidden" role="button" aria-label="Call Local Police">Call Local Police</a>
+            </div>
+            
+            <!-- Basic First Aid -->
+            <div>
+                <h3>Basic First Aid</h3>
+                <ul>
+                    <li>
+                        <strong>CPR:</strong> 
+                        
+                        1. Call 911. 2. Push hard and fast in center of chest. 30 compressions, 2 breaths.
+                    </li>
+                    <li>
+                        <strong>Bleeding:</strong> 
+                        
+                        Apply pressure with clean cloth. Elevate if possible.
+                    </li>
+                    <li>
+                        <strong>Choking:</strong> 
+                        5 back blows, then 5 abdominal thrusts.
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Emergency Contacts -->
+            <div>
+                <h3>Emergency Contacts</h3>
+                <ul id="contacts-list"></ul>
+                <input type="text" id="contact-name" placeholder="Name" aria-label="Contact Name">
+                <input type="tel" id="contact-phone" placeholder="Phone Number" aria-label="Contact Phone">
+                <button onclick="addContact()" class="green-btn">Add Contact (Max 5)</button>
+            </div>
+            
+            <!-- Location Share -->
+            <div>
+                <h3>Location Share</h3>
+                <button onclick="shareLocation()" class="btn">Share My Location</button>
+                <p id="location-info" class="alert hidden"></p>
+            </div>
+            
+            <!-- Medication Tracker -->
+            <div>
+                <h3>Medication & Allergies</h3>
+                <textarea id="meds-info" placeholder="Enter critical meds and allergies" rows="4" aria-label="Meds and Allergies"></textarea>
+                <button onclick="saveMeds()" class="green-btn">Save</button>
+                <p id="meds-display" class="alert hidden"></p>
+            </div>
+        </section>
+
+        <!-- Crisis Communication -->
+        <section id="crisis" class="section">
+            <h2>Crisis Communication</h2>
+            
+            <!-- I'm Safe Button -->
+            <div>
+                <h3>I'm Safe</h3>
+                <button onclick="sendImSafe()" class="green-btn">Send "I'm Safe" to Contacts</button>
+            </div>
+            
+            <!-- Simple Check-in -->
+            <div>
+                <h3>Daily Check-in</h3>
+                <button onclick="checkIn()" class="green-btn">Check In Now</button>
+                <p id="last-checkin">Last check-in: Never</p>
+            </div>
+            
+            <!-- Emergency Phrases -->
+            <div>
+                <h3>Emergency Phrases</h3>
+                <select id="language" aria-label="Select Language">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                </select>
+                <ul id="phrases-list">
+                    <li>Help! - ¡Ayuda! - Aide!</li>
+                    <li>I need a doctor. - Necesito un doctor. - J'ai besoin d'un médecin.</li>
+                    <li>Call the police. - Llama a la policía. - Appelez la police.</li>
+                </ul>
+                <button onclick="updatePhrases()" class="btn">Update Language</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Load saved data
+        window.onload = function() {
+            loadLocalPolice();
+            loadContacts();
+            loadMeds();
+            loadCheckIn();
+            updatePhrases();
+        };
+
+        // Local Police
+        function saveLocalPolice() {
+            const num = document.getElementById('local-police').value;
+            if (num) {
+                localStorage.setItem('localPolice', num);
+                const btn = document.getElementById('local-police-btn');
+                btn.href = 'tel:' + num;
+                btn.classList.remove('hidden');
+                speak('Local police number saved.');
+            }
+        }
+        function loadLocalPolice() {
+            const num = localStorage.getItem('localPolice');
+            if (num) {
+                document.getElementById('local-police').value = num;
+                const btn = document.getElementById('local-police-btn');
+                btn.href = 'tel:' + num;
+                btn.classList.remove('hidden');
+            }
+        }
+
+        // Contacts
+        let contacts = JSON.parse(localStorage.getItem('contacts')) || [];
+        function addContact() {
+            const name = document.getElementById('contact-name').value;
+            const phone = document.getElementById('contact-phone').value;
+            if (name && phone && contacts.length < 5) {
+                contacts.push({name, phone});
+                localStorage.setItem('contacts', JSON.stringify(contacts));
+                loadContacts();
+                speak('Contact added.');
+            } else if (contacts.length >= 5) {
+                alert('Max 5 contacts.');
+            }
+        }
+        function loadContacts() {
+            const list = document.getElementById('contacts-list');
+            list.innerHTML = '';
+            contacts.forEach((c, i) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${c.name}: <a href="tel:${c.phone}">${c.phone}</a> <button onclick="removeContact(${i})" aria-label="Remove Contact">Remove</button>`;
+                list.appendChild(li);
+            });
+        }
+        function removeContact(i) {
+            if (confirm('Remove this contact?')) {
+                contacts.splice(i, 1);
+                localStorage.setItem('contacts', JSON.stringify(contacts));
+                loadContacts();
+            }
+        }
+
+        // Location Share
+        function shareLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    const loc = `My location: https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`;
+                    document.getElementById('location-info').innerText = loc;
+                    document.getElementById('location-info').classList.remove('hidden');
+                    navigator.clipboard.writeText(loc);
+                    speak('Location copied to clipboard.');
+                }, () => {
+                    alert('Location access denied.');
+                });
+            } else {
+                alert('Geolocation not supported.');
+            }
+        }
+
+        // Meds
+        function saveMeds() {
+            const info = document.getElementById('meds-info').value;
+            localStorage.setItem('meds', info);
+            document.getElementById('meds-display').innerText = info;
+            document.getElementById('meds-display').classList.remove('hidden');
+            speak('Meds info saved.');
+        }
+        function loadMeds() {
+            const info = localStorage.getItem('meds');
+            if (info) {
+                document.getElementById('meds-info').value = info;
+                document.getElementById('meds-display').innerText = info;
+                document.getElementById('meds-display').classList.remove('hidden');
+            }
+        }
+
+        // I'm Safe
+        function sendImSafe() {
+            if (contacts.length === 0) {
+                alert('Add contacts first.');
+                return;
+            }
+            const msg = "I'm safe.";
+            contacts.forEach(c => {
+                window.open(`sms:${c.phone}?body=${encodeURIComponent(msg)}`, '_blank');
+            });
+            speak('Sending I\'m safe messages.');
+        }
+
+        // Check-in
+        function checkIn() {
+            const now = new Date().toISOString();
+            localStorage.setItem('lastCheckIn', now);
+            loadCheckIn();
+            speak('Checked in.');
+        }
+        function loadCheckIn() {
+            const last = localStorage.getItem('lastCheckIn');
+            document.getElementById('last-checkin').innerText = last ? `Last check-in: ${new Date(last).toLocaleString()}` : 'Last check-in: Never';
+        }
+
+        // Phrases
+        const phrases = {
+            en: ['Help!', 'I need a doctor.', 'Call the police.'],
+            es: ['¡Ayuda!', 'Necesito un doctor.', 'Llama a la policía.'],
+            fr: ['Aide!', "J'ai besoin d'un médecin.", 'Appelez la police.']
+        };
+        function updatePhrases() {
+            const lang = document.getElementById('language').value;
+            const list = document.getElementById('phrases-list');
+            list.innerHTML = '';
+            phrases.en.forEach((en, i) => {
+                const li = document.createElement('li');
+                li.innerText = `${en} - ${phrases[lang][i]}`;
+                list.appendChild(li);
+            });
+        }
+
+        // Voice feedback
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utter = new SpeechSynthesisUtterance(text);
+                speechSynthesis.speak(utter);
+            }
+        }
+    </script>
+</body>
+</html>
