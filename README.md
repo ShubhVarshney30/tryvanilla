@@ -1,8 +1,4 @@
-Universal Emergency Hub(Tracks: Grandma's Digital Sage + Universal Access Guardian + 2G Connection Ninja)
-A one-stop emergency information system that works for everyone, everywhere, on everything. This is a lightweight, accessible web application built with pure HTML, CSS, and vanilla JavaScript, designed to load quickly even on 2G networks. It provides essential emergency tools without relying on any external libraries, packages, or servers—everything is inline in a single HTML file.
-The project emphasizes efficiency, optimization, and universal accessibility, following best practices for low-bandwidth environments (total page size < 50KB), offline functionality via localStorage, and inclusive design for users with disabilities, elderly users, or those in low-resource settings.
-
-# 🆘 Universal Emergency Hub
+# 🆘 Universal Emergency Hub(Tracks: Grandma's Digital Sage + Universal Access Guardian + 2G Connection Ninja)
 
 A one-stop emergency assistant that works for everyone, everywhere — even on 2G. Built with pure HTML, CSS, and vanilla JS in a single `index.html` file. Zero dependencies. Ultra-fast. Accessible by design.
 
