@@ -5,24 +5,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universal Emergency Hub</title>
     <style>
-        body{font-family:sans-serif;font-size:18px;color:#000;background:#fff;margin:0;padding:10px;line-height:1.5;max-width:800px;margin:auto;}
-        h1,h2{font-size:24px;margin:10px 0;}
-        button,.btn{display:block;width:100%;font-size:24px;padding:20px;margin:10px 0;background:#007bff;color:#fff;border:none;cursor:pointer;border-radius:5px;text-align:center;min-height:44px;}
-        button:hover,.btn:hover{background:#0056b3;}
-        .red-btn{background:#dc3545;} .red-btn:hover{background:#c82333;}
-        .green-btn{background:#28a745;} .green-btn:hover{background:#218838;}
-        input,select,textarea{width:100%;font-size:18px;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px;box-sizing:border-box;}
-        ul{list-style:none;padding:0;}
-        li{margin:5px 0;}
-        .section{margin:20px 0;border-bottom:1px solid #eee;padding-bottom:10px;}
-        .hidden{display:none;}
-        svg{width:50px;height:50px;margin:10px;}
-        /* High contrast, large targets, accessible */
-        a{color:#007bff;text-decoration:underline;} a:focus{outline:2px solid #000;}
-        button:focus{outline:2px solid #000;}
-        input:focus{outline:2px solid #000;}
-        /* Color blind: patterns or text over color */
-        .alert{background:#ffc107;color:#000;padding:10px;}
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            color: #222;
+            background: linear-gradient(to bottom, #f0f4f8, #ffffff);
+            margin: 0;
+            padding: 15px;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: auto;
+            box-sizing: border-box;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 28px;
+            margin: 0;
+            color: #007bff;
+        }
+        h2 {
+            font-size: 24px;
+            color: #0056b3;
+            margin: 20px 0 10px;
+            border-left: 5px solid #007bff;
+            padding-left: 10px;
+        }
+        h3 {
+            font-size: 20px;
+            color: #333;
+            margin: 15px 0 5px;
+        }
+        button, .btn {
+            display: block;
+            width: 100%;
+            font-size: 24px;
+            padding: 15px;
+            margin: 10px 0;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            text-align: center;
+            min-height: 60px;
+            transition: background 0.3s ease, transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button:hover, .btn:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        button:focus, .btn:focus {
+            outline: 3px solid #ffcc00;
+            box-shadow: 0 0 0 3px rgba(255,204,0,0.5);
+        }
+        .red-btn {
+            background: #dc3545;
+        }
+        .red-btn:hover {
+            background: #c82333;
+        }
+        .green-btn {
+            background: #28a745;
+        }
+        .green-btn:hover {
+            background: #218838;
+        }
+        input, select, textarea {
+            width: 100%;
+            font-size: 18px;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background: #fff;
+            transition: border 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            border: 1px solid #007bff;
+            outline: none;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin: 25px 0;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .hidden {
+            display: none;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        a:focus {
+            outline: 2px solid #ffcc00;
+        }
+        .alert {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ffeeba;
+        }
+        /* Accessibility enhancements */
+        @media (prefers-reduced-motion: reduce) {
+            button, .btn {
+                transition: none;
+            }
+        }
+        /* High contrast mode */
+        @media (prefers-contrast: more) {
+            body { color: #000; background: #fff; }
+            button, .btn { border: 2px solid #000; }
+            input, textarea { border: 2px solid #000; }
+        }
+        /* Color blind friendly: avoid red-green, use patterns/text */
     </style>
 </head>
 <body>
@@ -51,18 +172,13 @@
                 <h3>Basic First Aid</h3>
                 <ul>
                     <li>
-                        <strong>CPR:</strong> 
-                        
-                        1. Call 911. 2. Push hard and fast in center of chest. 30 compressions, 2 breaths.
+                        <strong>CPR:</strong> 1. Call 911. 2. Push hard and fast in center of chest. 30 compressions, 2 breaths.
                     </li>
                     <li>
-                        <strong>Bleeding:</strong> 
-                        
-                        Apply pressure with clean cloth. Elevate if possible.
+                        <strong>Bleeding:</strong> Apply pressure with clean cloth. Elevate if possible.
                     </li>
                     <li>
-                        <strong>Choking:</strong> 
-                        5 back blows, then 5 abdominal thrusts.
+                        <strong>Choking:</strong> 5 back blows, then 5 abdominal thrusts.
                     </li>
                 </ul>
             </div>
